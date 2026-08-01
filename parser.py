@@ -72,7 +72,7 @@ def obtener_url_categoria(html, nombre_categoria):
     enlaces = sidebar.find_all("a")
     for enlace in enlaces:
         texto = enlace.text.strip().lower()
-        if texto == nombre_categoria.lower():
+        if texto == nombre_categoria.strip().lower():
             return enlace["href"]
 
     return None

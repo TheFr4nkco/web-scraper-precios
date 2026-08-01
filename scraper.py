@@ -15,6 +15,8 @@ def obtener_pagina(url):
     try:
         respuesta = requests.get(url, timeout=10)
         respuesta.raise_for_status()
+        # forzar utf-8 para que no salgan caracteres raros en el csv
+        respuesta.encoding = "utf-8"
         return respuesta.text
     except requests.ConnectionError:
         print(f"Error: No se pudo conectar a {url}")
@@ -125,8 +127,8 @@ def mostrar_resumen(libros):
         print(f"{'-'*50}")
         for libro in libros[:5]:
             estrellas = "*" * libro["rating"] + "-" * (5 - libro["rating"])
-            # Algunos títulos tienen caracteres especiales, los reemplazamos para no crashear
-            titulo_safe = libro["titulo"][:40].encode("ascii", "replace").decode("ascii")
+            # Cortar el título si es muy largo para que se vea bien en la terminal
+            titulo_safe = libro["titulo"][:40]
             print(f"  {titulo_safe:<40} | {libro['precio']:>7} | {estrellas}")
         if len(libros) > 5:
             print(f"  ... y {len(libros) - 5} libros mas")
